@@ -15,43 +15,42 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       formdata: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       }
-    };
+    }
   },
   methods: {
-    async handleLogin() {
-      const res = await this.$http.post("login", this.formdata);
-      const {
-        data: {
-          meta: { msg, status }
-        }
-      } = res;
+    async handleLogin () {
+      const res = await this.$http.post('login', this.formdata)
+      // const {
+      //   data: {
+      //     meta: { msg, status}
+      //   }
+      // } = res
+      const {data: {meta: {msg, status}}} = res
 
       if (status === 200) {
         //   保存token值
-        localStorage.setItem('token',data.token)
+        // localStorage.setItem('token', data.token)
 
-        
         // 进去home页
         this.$router.push({
-          name: "home"
-        });
+          name: 'home'
+        })
       } else {
         this.$message({
           message: msg,
-          type: "error"
-        });
+          type: 'error'
+        })
       }
     }
   }
-};
+}
 </script>
-
 
 <style>
 .login-wrap {
