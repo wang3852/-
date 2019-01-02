@@ -94,6 +94,20 @@
 
 <script>
 export default {
+// 在渲染组件前，判断token,否，提示登录，有，进入home
+beforeCreate() {
+  if (!localStorage.getItem('token')) {
+    // 登录页
+    this.$router.push({
+   
+      path: '/login'
+    })
+    // 提示
+    this.$message.warning('请先登录')
+    
+  }
+},
+
   // 退出
   methods:{
     handlelogout() {
