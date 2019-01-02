@@ -93,7 +93,7 @@
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style>
@@ -103,12 +103,8 @@ export default {};
 .header {
   background-color: #b1becf;
 }
-.aside {
-  background-color: pink;
-}
-.main {
-  background-color: lightseagreen;
-}
+
+
 .middle {
   text-align: center;
   color: #fff;
