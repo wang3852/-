@@ -11,10 +11,10 @@
     <!-- 搜索框 + 按钮-->
     <el-row>
       <el-col>
-        <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input @clear="getDateAll()" clearable placeholder="请输入用户名" v-model="query" class="input-with-select">
+          <el-button slot="append" icon="el-icon-search" @click="searchUser()"></el-button>
         </el-input>
-        <el-button type="success" plain>添加用户</el-button>
+        <el-button type="success" plain >添加用户</el-button>
       </el-col>
     </el-row>
     <!-- 表格 -->
@@ -72,6 +72,15 @@ export default {
     this.getTableData();
   },
   methods: {
+    // 当点击搜索x时，渲染所有数据
+    getDateAll() {
+      this.getTableData();
+    },
+    // 搜索查询
+    searchUser() {
+      this.pagenum=1;
+      this.getTableData();
+    },
     // 分页
      handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
