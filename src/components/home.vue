@@ -10,7 +10,7 @@
           <h3>电商后台管理系统</h3>
         </el-col>
         <el-col :span="1">
-          <a href="#" class="logout">退出</a>
+          <a href="#" class="logout" @click.prevent="handlelogout()">退出</a>
         </el-col>
       </el-row>
     </el-header>
@@ -93,7 +93,22 @@
 </template>
 
 <script>
-export default {}
+export default {
+  // 退出
+  methods:{
+    handlelogout() {
+      // 回到登录页
+      this.$router.push({
+       name: 'login'
+      })
+      // 删除token值
+      localStorage.clear();
+      // 提示
+      this.$message.success('退出成功')
+
+    }
+  }
+}
 </script>
 
 <style>

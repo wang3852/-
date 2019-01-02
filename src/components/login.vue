@@ -26,17 +26,14 @@ export default {
   methods: {
     async handleLogin () {
       const res = await this.$http.post('login', this.formdata)
-      // const {
-      //   data: {
-      //     meta: { msg, status}
-      //   }
-      // } = res
-      const {data: {meta: {msg, status}}} = res
-
+      console.log(res.data);
+      const {data:{token},meta:{msg,status}} = res.data
       if (status === 200) {
         //   保存token值
-        // localStorage.setItem('token', data.token)
-
+        localStorage.setItem('token', token)
+      //  const a = localStorage.getItem('token');
+      //  console.log(a);
+       
         // 进去home页
         this.$router.push({
           name: 'home'
