@@ -43,8 +43,8 @@
       <el-table-column prop label="操作" width="300">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="primary" plain size="mini" icon="el-icon-edit" circle></el-button>
-            <el-button type="danger" plain size="mini" icon="el-icon-delete" circle></el-button>
+            <el-button type="primary" plain size="mini" icon="el-icon-edit" @click="showEditDia()" circle></el-button>
+            <el-button type="danger" plain size="mini" icon="el-icon-delete" @click="showDelDia(scope.row)" circle></el-button>
             <el-button type="success" plain size="mini" icon="el-icon-check" circle></el-button>
           </el-row>
         </template>
@@ -61,7 +61,7 @@
       :total="total"
     ></el-pagination>
 
-    <!-- 对话框 -->
+    <!-- 添加对话框 -->
     <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
       <el-form :model="form">
         <el-form-item label="用户名" :label-width="formLabelWidth">
@@ -83,6 +83,27 @@
         <el-button type="primary" @click="addUser()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 编辑对话框 -->
+    <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
+      <el-form :model="form">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="form.username" autocomplete="off"></el-input>
+        </el-form-item>
+          <el-form-item label="邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+          <el-form-item label="电话" :label-width="formLabelWidth">
+          <el-input v-model="form.mobile" autocomplete="off"></el-input>
+        </el-form-item>
+        
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
+        <el-button type="primary" @click="editUser()">确 定</el-button>
+      </div>
+    </el-dialog>
+    
   </el-card>
 </template>
 
@@ -103,6 +124,7 @@ export default {
 
       },
      dialogFormVisibleAdd:false,
+     dialogFormVisibleEdit:false,
      formLabelWidth:"100px"
     };
   },
@@ -110,6 +132,34 @@ export default {
     this.getTableData();
   },
   methods: {
+    // 显示编辑页
+    showEditDia() {
+      this.dialogFormVisibleEdit = true;
+    },
+    // 显示删除提示框
+    showDelDia(user) {
+      // console.log(user);
+      
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+        // 发删除请求
+          const res = await this.$http.delete(`users/${user.id}`)
+          console.log(res);
+          const {meta:{msg,status}}=res.data;
+          if (status ===200) {
+        this.$message.success(msg);
+        this.pagenum=1;
+        this.getTableData();
+          }
+        
+            
+        }).catch(() => {
+           this.$message.success('取消删除')        
+        });
+    },
     // 添加用户
    async addUser() {
       // 发请求
