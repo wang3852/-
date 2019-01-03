@@ -37,7 +37,7 @@
       <el-table-column prop="mg_state" label="用户状态">
         <template slot-scope="scope">
           <!-- 内层组件使用外层组件的值，用slot-scope -->
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch v-model="scope.row.mg_state" @change="changeUserState(scope.row)" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
       <el-table-column prop label="操作" width="300">
@@ -132,6 +132,15 @@ export default {
     this.getTableData();
   },
   methods: {
+    // 更改用户状态
+    async changeUserState(user) {
+      // console.log(user);
+      // 发请求
+      const res = await this.$http.put(`users/${user.id}/state/${user.mg_state}`)
+      console.log(res);
+    
+    },
+
     // 编辑用户
     async  editUser() {
         // 发送请求
@@ -154,7 +163,7 @@ export default {
       this.dialogFormVisibleEdit = true;
       // console.log(user);
       this.form = user;
-    
+  
     },
     // 显示删除提示框
     showDelDia(user) {
