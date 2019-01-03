@@ -43,7 +43,7 @@
       <el-table-column prop label="操作" width="300">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="primary" plain size="mini" icon="el-icon-edit" @click="showEditDia()" circle></el-button>
+            <el-button type="primary" plain size="mini" icon="el-icon-edit" @click="showEditDia(scope.row)" circle></el-button>
             <el-button type="danger" plain size="mini" icon="el-icon-delete" @click="showDelDia(scope.row)" circle></el-button>
             <el-button type="success" plain size="mini" icon="el-icon-check" circle></el-button>
           </el-row>
@@ -87,8 +87,8 @@
     <!-- 编辑对话框 -->
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
       <el-form :model="form">
-        <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-input v-model="form.username" autocomplete="off"></el-input>
+        <el-form-item  label="用户名" :label-width="formLabelWidth">
+          <el-input disabled v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
           <el-form-item label="邮箱" :label-width="formLabelWidth">
           <el-input v-model="form.email" autocomplete="off"></el-input>
@@ -132,9 +132,29 @@ export default {
     this.getTableData();
   },
   methods: {
+    // 编辑用户
+    async  editUser() {
+        // 发送请求
+        const res = await this.$http.put(`users/${this.form.id}`,this.form)
+        console.log(res);
+        const {meta:{msg,status}}=res.data;
+        if (status == 200) {
+            // 关闭对话框
+            // 刷新列表
+           this.dialogFormVisibleEdit=false;
+           this.getTableData();
+        } else {
+          this.$message.warning(msg);
+        }
+
+      },
+
     // 显示编辑页
-    showEditDia() {
+      showEditDia(user) {
       this.dialogFormVisibleEdit = true;
+      // console.log(user);
+      this.form = user;
+    
     },
     // 显示删除提示框
     showDelDia(user) {
@@ -147,7 +167,7 @@ export default {
         }).then(async () => {
         // 发删除请求
           const res = await this.$http.delete(`users/${user.id}`)
-          console.log(res);
+          // console.log(res);
           const {meta:{msg,status}}=res.data;
           if (status ===200) {
         this.$message.success(msg);
@@ -193,7 +213,7 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       // 更改当前条数，重新发请求，渲染表格数据 pagenum=1,pagesize=val
       this.pagesize = val;
       this.pagenum = 1;
@@ -203,7 +223,7 @@ export default {
       // 改变页数，重新发起请求 ,获取当前页数的数据 pagenum=val,pagesize=2
       this.pagenum = val;
       this.getTableData();
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
     },
 
     //   获取表格数据
@@ -223,8 +243,7 @@ export default {
       if (status == 200) {
         // 设置分页总条数
         this.total = total;
-        console.log(users);
-
+        // console.log(users);
         this.tableData = users;
 
         this.$message.success("获取管理员信息成功");
