@@ -37,15 +37,41 @@
       <el-table-column prop="mg_state" label="用户状态">
         <template slot-scope="scope">
           <!-- 内层组件使用外层组件的值，用slot-scope -->
-          <el-switch v-model="scope.row.mg_state" @change="changeUserState(scope.row)" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch
+            v-model="scope.row.mg_state"
+            @change="changeUserState(scope.row)"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          ></el-switch>
         </template>
       </el-table-column>
       <el-table-column prop label="操作" width="300">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="primary" plain size="mini" icon="el-icon-edit" @click="showEditDia(scope.row)" circle></el-button>
-            <el-button type="danger" plain size="mini" icon="el-icon-delete" @click="showDelDia(scope.row)" circle></el-button>
-            <el-button type="success" plain size="mini" icon="el-icon-check" @click="showRoleDia(scope.row)" circle></el-button>
+            <el-button
+              type="primary"
+              plain
+              size="mini"
+              icon="el-icon-edit"
+              @click="showEditDia(scope.row)"
+              circle
+            ></el-button>
+            <el-button
+              type="danger"
+              plain
+              size="mini"
+              icon="el-icon-delete"
+              @click="showDelDia(scope.row)"
+              circle
+            ></el-button>
+            <el-button
+              type="success"
+              plain
+              size="mini"
+              icon="el-icon-check"
+              @click="showRoleDia(scope.row)"
+              circle
+            ></el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -67,16 +93,15 @@
         <el-form-item label="用户名" :label-width="formLabelWidth">
           <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
-          <el-form-item label="密码" :label-width="formLabelWidth">
+        <el-form-item label="密码" :label-width="formLabelWidth">
           <el-input v-model="form.password" autocomplete="off"></el-input>
         </el-form-item>
-          <el-form-item label="邮箱" :label-width="formLabelWidth">
+        <el-form-item label="邮箱" :label-width="formLabelWidth">
           <el-input v-model="form.email" autocomplete="off"></el-input>
         </el-form-item>
-          <el-form-item label="电话" :label-width="formLabelWidth">
+        <el-form-item label="电话" :label-width="formLabelWidth">
           <el-input v-model="form.mobile" autocomplete="off"></el-input>
         </el-form-item>
-        
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleAdd = false">取 消</el-button>
@@ -87,16 +112,15 @@
     <!-- 编辑对话框 -->
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
       <el-form :model="form">
-        <el-form-item  label="用户名" :label-width="formLabelWidth">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
           <el-input disabled v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
-          <el-form-item label="邮箱" :label-width="formLabelWidth">
+        <el-form-item label="邮箱" :label-width="formLabelWidth">
           <el-input v-model="form.email" autocomplete="off"></el-input>
         </el-form-item>
-          <el-form-item label="电话" :label-width="formLabelWidth">
+        <el-form-item label="电话" :label-width="formLabelWidth">
           <el-input v-model="form.mobile" autocomplete="off"></el-input>
         </el-form-item>
-        
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
@@ -106,25 +130,25 @@
 
     <!-- 分配角色对话框 -->
     <el-dialog title="分配角色" :visible.sync="dialogFormVisibleRole">
-  <el-form :model="form">
-    <el-form-item label="用户名" :label-width="formLabelWidth">
-      <el-input v-model="currentUserName" autocomplete="off"></el-input>
-    </el-form-item>
-    
-    <el-form-item label="角色" :label-width="formLabelWidth">
-       {{currentUserRoleId}}
-      <el-select v-model="currentUserRoleId">
-        <el-option label="请选择" :value="-1"></el-option>
-        <el-option v-for="(v,i) in roles" :key="i" :label="v.roleName" :value="v.id"></el-option>
-      </el-select>
-    </el-form-item> 
-  </el-form>
-  <div slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisibleRole = false">确 定</el-button>
-  </div>
-</el-dialog>
-    
+      <el-form :model="form">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+         {{currentUserName}}
+        </el-form-item>
+
+        <el-form-item label="角色" :label-width="formLabelWidth">
+          {{currentUserRoleId}}
+          <el-select v-model="currentUserRoleId">
+            <el-option disabled label="请选择" :value="-1"></el-option>
+            <el-option v-for="(v,i) in roles" :key="i" :label="v.roleName" :value="v.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
+        <el-button type="primary" @click="setRole()">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -137,119 +161,145 @@ export default {
       pagenum: 1,
       pagesize: 2,
       total: 1,
-      form:{
-        username:'',
-        password:'',
-        email:'',
-        mobile:''
-
+      form: {
+        username: "",
+        password: "",
+        email: "",
+        mobile: ""
       },
-     dialogFormVisibleAdd:false,
-     dialogFormVisibleEdit:false,
-     dialogFormVisibleRole:false,
-     formLabelWidth:"100px",
-     currentUserRoleId:-1,
-     roles:[],
-     currentUserName:''
+      dialogFormVisibleAdd: false,
+      dialogFormVisibleEdit: false,
+      dialogFormVisibleRole: false,
+      formLabelWidth: "100px",
+      currentUserRoleId: -1,
+      roles: [],
+      currentUserName: "",
+      currentUserId: ""
     };
   },
   created() {
     this.getTableData();
   },
   methods: {
+    //修改用户角色
+    async setRole() {
+      // 发请求
+      // 用户id -> 在data中声明
+      // 角色rid -> 在v-model中
+
+      const res = await this.$http.put(`users/${this.currentUserId}/role`, {
+        rid: this.currentUserRoleId
+      });
+
+      // console.log(res);
+
+      this.dialogFormVisibleRole = false;
+    },
     // 显示分配角色对话框
-   async showRoleDia(user) {
+    async showRoleDia(user) {
       // 发请求
       // console.log(user);
+      // 用户名字
       this.currentUserName = user.username;
-     const res= await this.$http.get(`roles`)
+      // 用户id
+      this.currentUserId = user.id;
+      const res = await this.$http.get(`roles`);
       this.roles = res.data.data;
       // console.log(this.roles);
-    根据
+      // 根据用户id 查询当前角色rid
+      const res2 = await this.$http.get(`users/${user.id}`);
+      // console.log(res2);
+      
+  
+      // 将返回结果中的roles.id 赋值给当前的角色id
+      this.currentUserRoleId =res2.data.data.rid;
+
 
 
       this.dialogFormVisibleRole = true;
-
     },
     // 更改用户状态
     async changeUserState(user) {
       // console.log(user);
       this.form = user;
       // 发请求
-      const res = await this.$http.put(`users/${user.id}/state/${user.mg_state}`)
+      const res = await this.$http.put(
+        `users/${user.id}/state/${user.mg_state}`
+      );
       // console.log(res);
-    
     },
 
     // 编辑用户
-    async  editUser() {
-        // 发送请求
-        const res = await this.$http.put(`users/${this.form.id}`,this.form)
-        console.log(res);
-        const {meta:{msg,status}}=res.data;
-        if (status == 200) {
-            // 关闭对话框
-            // 刷新列表
-           this.dialogFormVisibleEdit=false;
-           this.getTableData();
-        } else {
-          this.$message.warning(msg);
-        }
-
-      },
+    async editUser() {
+      // 发送请求
+      const res = await this.$http.put(`users/${this.form.id}`, this.form);
+      // console.log(res);
+      const {
+        meta: { msg, status }
+      } = res.data;
+      if (status == 200) {
+        // 关闭对话框
+        // 刷新列表
+        this.dialogFormVisibleEdit = false;
+        this.getTableData();
+      } else {
+        this.$message.warning(msg);
+      }
+    },
 
     // 显示编辑页
-      showEditDia(user) {
+    showEditDia(user) {
       this.dialogFormVisibleEdit = true;
       // console.log(user);
       this.form = user;
-  
     },
     // 显示删除提示框
     showDelDia(user) {
       // console.log(user);
-      
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(async () => {
-        // 发删除请求
-          const res = await this.$http.delete(`users/${user.id}`)
+
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          // 发删除请求
+          const res = await this.$http.delete(`users/${user.id}`);
           // console.log(res);
-          const {meta:{msg,status}}=res.data;
-          if (status ===200) {
-        this.$message.success(msg);
-        this.pagenum=1;
-        this.getTableData();
+          const {
+            meta: { msg, status }
+          } = res.data;
+          if (status === 200) {
+            this.$message.success(msg);
+            this.pagenum = 1;
+            this.getTableData();
           }
-        
-            
-        }).catch(() => {
-           this.$message.success('取消删除')        
+        })
+        .catch(() => {
+          this.$message.success("取消删除");
         });
     },
     // 添加用户
-   async addUser() {
+    async addUser() {
       // 发请求
-      const res = await this.$http.post('users',this.form)
+      const res = await this.$http.post("users", this.form);
       // console.log(res)
-      const {meta:{msg,status}}=res.data;
-      if (status ==201) {
+      const {
+        meta: { msg, status }
+      } = res.data;
+      if (status == 201) {
         // 关闭对话框
-       this.dialogFormVisibleAdd = false
-      // 渲染列表
-      this.getTableData();
+        this.dialogFormVisibleAdd = false;
+        // 渲染列表
+        this.getTableData();
       } else {
-        this.$message.warning('该用户名已存在');
+        this.$message.warning("该用户名已存在");
       }
-      
-      
     },
     // 显示对话框
     showDiaAdd() {
-      this.form={};
-      this.dialogFormVisibleAdd=true;
+      this.form = {};
+      this.dialogFormVisibleAdd = true;
     },
     // 当点击搜索x时，渲染所有数据
     getDateAll() {
