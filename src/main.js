@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 import moment from 'moment'
+import myBread from './components/cusBread.vue'
 
 // 处理日期格式
 Vue.filter('fmtDate', (v) => {
@@ -16,6 +17,7 @@ Vue.filter('fmtDate', (v) => {
 Vue.use(Http)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+Vue.component(myBread.name, myBread)
 
 /* eslint-disable no-new */
 new Vue({
