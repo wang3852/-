@@ -6,7 +6,7 @@ Http.install = function (Vue) {
 
 	axios.interceptors.request.use(function (config) {
 		// 在发送请求之前做些什么
-		console.log(config);
+		// console.log(config);
 		
 		if (config.url !== 'login') {
 			const token = localStorage.getItem('token')
