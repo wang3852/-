@@ -18,12 +18,12 @@
       <el-aside width="200px" class="aside">
         <el-menu router default-active="2" unique-opened>
             <!-- 1 -->
-          <el-submenu :index="item1.order" v-for="(item1,i) in menu" :key="item1.id">
+          <el-submenu :index=" '' + item1.order" v-for="(item1) in menu" :key="item1.id">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>{{item1.authName}}</span>
             </template>
-            <el-menu-item :index="item2.path" v-for="(item2,i) in item1.children" :key="item2.id">
+            <el-menu-item :index="item2.path" v-for="(item2) in item1.children" :key="item2.id">
               <i class="el-icon-menu"></i>
               {{item2.authName}}
             </el-menu-item>
@@ -47,18 +47,18 @@ export default {
     }
   },
 // 在渲染组件前，判断token,否，提示登录，有，进入home
-beforeCreate() {
-  if (!localStorage.getItem('token')) {
-    // 登录页
-    this.$router.push({
+// beforeCreate() {
+//   if (!localStorage.getItem('token')) {
+//     // 登录页
+//     this.$router.push({
    
-      path: '/login'
-    })
-    // 提示
-    this.$message.warning('请先登录')
+//       path: '/login'
+//     })
+//     // 提示
+//     this.$message.warning('请先登录')
     
-  }
-},
+//   }
+// },
 created() {
 this.getMenu();
 },
