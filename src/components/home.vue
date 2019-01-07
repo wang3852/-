@@ -71,8 +71,7 @@ this.getMenu();
       const res = await this.$http.get(`menus`);
       // console.log(res);
       this.menu = res.data.data;
-      console.log(this.menu);
-      
+      // console.log(this.menu);
       
     },
     handlelogout() {

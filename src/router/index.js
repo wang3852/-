@@ -6,6 +6,8 @@ import Users from '../components/users.vue'
 import Rights from '../components/rights.vue'
 import Roles from '../components/roles.vue'
 import {Message} from 'element-ui'
+import  Goolslist from '../components/goodslist.vue'
+import  Goodsadd from '../components/goodsadd.vue'
 
 // ../ 在这里相当于 @/ 指的是src
 
@@ -32,6 +34,16 @@ const router = new Router({
           name: 'roles',
           path: '/roles',
           component: Roles
+        },
+        {
+          name: 'goods',
+          path: '/goods',
+          component: Goolslist
+        },
+        {
+          name:'goodsadd',
+          path:'/goods/add',
+          component:Goodsadd
         }
       ]
     },
