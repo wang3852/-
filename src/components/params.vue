@@ -21,6 +21,7 @@
     <!-- tabs标签 -->
     <el-tabs type="border-card" v-model="active" @tab-click="changetas()">
       <el-tab-pane label="动态参数" name="1">
+        <el-button type="primary" :disabled="selectedOptions.length===0">设置动态参数</el-button>
         <el-table height="300px" :data="attDy" style="width: 100%">
           <el-table-column label="#" type="expand" width="180">
             <template slot-scope="scope">
@@ -55,7 +56,22 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="静态参数" name="2">静态参数</el-tab-pane>
+      <el-tab-pane label="静态参数" name="2">
+        <el-button type="primary" :disabled="selectedOptions.length===0">设置静态参数</el-button>
+         <el-table height="300px" :data="attrStatic" style="width: 100%">
+           <el-table-column type="index" label="#" width="120"></el-table-column>
+          <el-table-column prop="attr_name" label="属性名称" width="180"></el-table-column>
+          <el-table-column prop="attr_id" label="属性值" width="180"></el-table-column>
+          <el-table-column prop label="操作" width="200">
+            <template slot-scope="scope">
+              <el-row>
+                <el-button type="primary" plain size="mini" icon="el-icon-edit" circle></el-button>
+                <el-button type="danger" plain size="mini" icon="el-icon-delete" circle></el-button>
+              </el-row>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
@@ -74,10 +90,12 @@ export default {
       },
       active: "1",
       attDy: [],
+      attrStatic:[],
       // 动态tag
-      dynamicTags: ["标签一", "标签二", "标签三"],
+     
       inputVisible: false,
-      inputValue: ""
+      inputValue: "",
+
     };
   },
   created() {
@@ -96,7 +114,7 @@ export default {
      attr_vals:attr.attr_vals.join(',')
    }
     const res = await this.$http.put(`categories/${this.selectedOptions[2]}/attributes/${attr.attr_id}`,putData);
-    console.log(res);
+    // console.log(res);
   
     
     },
@@ -119,7 +137,7 @@ export default {
           attr_vals:attr.attr_vals.join(',')
         }
         const res = await this.$http.put(`categories/${this.selectedOptions[2]}/attributes/${attr.attr_id}`,putData);
-        console.log(res);
+        // console.log(res);
         }
       
       this.inputVisible = false;
@@ -130,12 +148,21 @@ export default {
       if (this.selectedOptions.length === 3 && this.active === "1") {
         this.getattDy();
       }
+      // 改变tabs， 获取静态参数
+       if (this.selectedOptions.length === 3 && this.active === "2") {
+        this.getattrStatic();
+      }
     },
     handleChange() {
       // 级联改变，获取动态参数
       if (this.selectedOptions.length === 3 && this.active === "1") {
         this.getattDy();
       }
+      // 级联改变，获取静态参数
+       if (this.selectedOptions.length === 3 && this.active === "2") {
+        this.getattrStatic();
+      }
+
     },
     async getattDy() {
       // 获取动态参数
@@ -158,11 +185,38 @@ export default {
           item.attr_vals = item.attr_vals.trim().split(",");
           // console.log(item.attr_vals);
         });
-        console.log(this.attDy);
+        // console.log(this.attDy);
       } else {
         this.$message.warning("请先选择三级分类");
       }
     },
+     async getattrStatic() {
+      // 获取动态参数
+      const res = await this.$http.get(
+        `categories/${this.selectedOptions[2]}/attributes?sel=only`
+      );
+      // console.log(res);
+      const {
+        meta: { msg, status }
+      } = res.data;
+      if (status === 200) {
+        this.attrStatic = res.data.data;
+        // console.log(this.attDy);
+        // 将分类vals值字符串转数组
+        // console.log(res.data[0].attr_vals);
+
+        // this.attDy.forEach(item => {
+        //   // 当前是字符串，不满足接口格式
+        //   // console.log(item.attr_vals);
+        //   item.attr_vals = item.attr_vals.trim().split(",");
+        //   // console.log(item.attr_vals);
+        // });
+        console.log(this.attrStatic);
+      } else {
+        this.$message.warning("请先选择三级分类");
+      }
+    },
+
     async getGoodsCate() {
       const res = await this.$http.get("categories?type=3");
       // console.log(res);
