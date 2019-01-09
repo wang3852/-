@@ -23,30 +23,33 @@
       <el-tab-pane label="动态参数" name="1">
         <el-table height="300px" :data="attDy" style="width: 100%">
           <el-table-column label="#" type="expand" width="180">
-              <template slot-scope="scope">
-                'add'
-              </template>
+            <template slot-scope="scope">
+              <!-- 动态 el-tag -->
+              <el-tag
+                :key="item.attr_id"
+                v-for="(item,i) in scope.row.attr_vals"
+                closable
+                :disable-transitions="false"
+                @close="handleClose(scope.row,item)"
+              >{{item}}</el-tag>
+              <el-input
+                class="input-new-tag"
+                v-if="inputVisible"
+                v-model="inputValue"
+                ref="saveTagInput"
+                size="small"
+                @keyup.enter.native="handleInputConfirm(scope.row)"
+                @blur="handleInputConfirm(scope.row)"
+              ></el-input>
+              <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+            </template>
           </el-table-column>
           <el-table-column prop="attr_name" label="属性名称" width="180"></el-table-column>
           <el-table-column prop label="操作" width="300">
             <template slot-scope="scope">
               <el-row>
-                <el-button
-                  type="primary"
-                  plain
-                  size="mini"
-                  icon="el-icon-edit"
-                
-                  circle
-                ></el-button>
-                <el-button
-                  type="danger"
-                  plain
-                  size="mini"
-                  icon="el-icon-delete"
-             
-                  circle
-                ></el-button>
+                <el-button type="primary" plain size="mini" icon="el-icon-edit" circle></el-button>
+                <el-button type="danger" plain size="mini" icon="el-icon-delete" circle></el-button>
               </el-row>
             </template>
           </el-table-column>
@@ -70,13 +73,58 @@ export default {
         children: "children"
       },
       active: "1",
-      attDy: []
+      attDy: [],
+      // 动态tag
+      dynamicTags: ["标签一", "标签二", "标签三"],
+      inputVisible: false,
+      inputValue: ""
     };
   },
   created() {
     this.getGoodsCate();
   },
   methods: {
+    // 动态tag
+    async handleClose(attr,item) {
+     attr.attr_vals.splice( attr.attr_vals.indexOf(item), 1);
+    //  发请求
+    // 分类id
+    // 参数id
+   const putData={
+     attr_name:attr.attr_name,
+     attr_sel:attr.attr_sel,
+     attr_vals:attr.attr_vals.join(',')
+   }
+    const res = await this.$http.put(`categories/${this.selectedOptions[2]}/attributes/${attr.attr_id}`,putData);
+    console.log(res);
+  
+    
+    },
+
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+   async handleInputConfirm(attr) {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+          attr.attr_vals.push(inputValue);
+          // 添加参数
+          const putData={
+          attr_name:attr.attr_name,
+          attr_sel:attr.attr_sel,
+          attr_vals:attr.attr_vals.join(',')
+        }
+        const res = await this.$http.put(`categories/${this.selectedOptions[2]}/attributes/${attr.attr_id}`,putData);
+        console.log(res);
+        }
+      
+      this.inputVisible = false;
+      this.inputValue = "";
+    },
     changetas() {
       // 改变tabs获取动态参数
       if (this.selectedOptions.length === 3 && this.active === "1") {
@@ -106,11 +154,11 @@ export default {
 
         this.attDy.forEach(item => {
           // 当前是字符串，不满足接口格式
-          console.log(item.attr_vals);
+          // console.log(item.attr_vals);
           item.attr_vals = item.attr_vals.trim().split(",");
-          console.log(item.attr_vals);
+          // console.log(item.attr_vals);
         });
-        // console.log(this.attDy);
+        console.log(this.attDy);
       } else {
         this.$message.warning("请先选择三级分类");
       }
@@ -128,5 +176,20 @@ export default {
 <style>
 .card {
   height: 100%;
+}
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 </style>
