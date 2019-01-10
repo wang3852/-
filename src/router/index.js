@@ -9,6 +9,7 @@ import {Message} from 'element-ui'
 import Goolslist from '../components/goodslist.vue'
 import Goodsadd from '../components/goodsadd.vue'
 import Params from '../components/params.vue'
+import Goodscate from '../components/goodscate.vue'
 
 // ../ 在这里相当于 @/ 指的是src
 
@@ -50,6 +51,11 @@ const router = new Router({
           name:'params',
           path:'/params',
           component:Params
+        },
+        {
+          name:'categories',
+          path:'/categories',
+          component:Goodscate
         }
        
       ]
