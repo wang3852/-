@@ -24,7 +24,7 @@
       </el-col>
     </el-row>
     <!-- 表格 -->
-    <el-table height="300px" :data="tableData" style="width: 100%">
+    <el-table height="300px" :data="tableData" style="width: 100%"  v-loading="loading">
       <el-table-column prop="id" label="#" width="120"></el-table-column>
       <el-table-column prop="username" label="姓名" width="120"></el-table-column>
       <el-table-column prop="email" label="邮箱"></el-table-column>
@@ -156,6 +156,7 @@
 export default {
   data() {
     return {
+      loading:true,
       query: "",
       tableData: [],
       pagenum: 1,
@@ -347,6 +348,7 @@ export default {
 
         this.$message.success("获取管理员信息成功");
       }
+      this.loading=false;
     }
   }
 };
