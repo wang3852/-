@@ -4,10 +4,10 @@
     <el-header class="header">
       <el-row>
         <el-col :span="3">
-          <img src="../assets/logo.png">
+          <img src="../assets/logo.png" class="img">
         </el-col>
         <el-col :span="19" class="middle">
-          <h3>电商后台管理系统</h3>
+          <h3>学苑商城后台管理系统</h3>
         </el-col>
         <el-col :span="1">
           <a href="#" class="logout" @click.prevent="handlelogout()">退出</a>
@@ -105,5 +105,9 @@ this.getMenu();
 .logout {
   line-height: 60px;
   text-decoration: none;
+}
+.img {
+  width: 207px;
+  height: 56px;
 }
 </style>
